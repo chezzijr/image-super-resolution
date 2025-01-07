@@ -1,0 +1,16 @@
+[project]
+name = "test-pretrained-sr"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "huggingface-hub==0.25.0",
+    "matplotlib>=3.10.0",
+    "pyqt5>=5.15.11",
+    "realesrgan",
+    "tqdm>=4.67.1",
+]
+
+[tool.uv.sources]
+realesrgan = { git = "https://github.com/sberbank-ai/Real-ESRGAN.git" }
