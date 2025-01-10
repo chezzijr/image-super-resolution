@@ -12,14 +12,13 @@ modules = [espcn, edsr]
 upscale_factor = 4
 weights_path = join(getcwd(), "weights")
 stats_path = join(getcwd(), "stats")
+# ensure paths
+os.makedirs(weights_path, exist_ok=True)
+os.makedirs(stats_path, exist_ok=True)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 checkpoint_path = join(getcwd(), "checkpoint")
 
 def prepare_dataset():
-    # if dataset exists, return
-    # if exists(join(getcwd(), "datasets", "train")) and exists(join(getcwd(), "datasets", "validate")):
-    #     return
-
     # Download latest version
     path = kagglehub.dataset_download("sharansmenon/div2k")
     print("Path to dataset files:", path) 
