@@ -10,13 +10,15 @@ import shutil
 
 modules = [espcn, edsr]
 upscale_factor = 4
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
 weights_path = join(getcwd(), "weights")
 stats_path = join(getcwd(), "stats")
+checkpoint_path = join(getcwd(), "checkpoint")
 # ensure paths
 os.makedirs(weights_path, exist_ok=True)
 os.makedirs(stats_path, exist_ok=True)
-device = "cuda" if torch.cuda.is_available() else "cpu"
-checkpoint_path = join(getcwd(), "checkpoint")
+os.makedirs(checkpoint_path, exist_ok=True)
 
 def prepare_dataset():
     # Download latest version
@@ -50,7 +52,6 @@ def train():
         
         # checkpoint from latest epoch if any
         # ensure checkpoint path
-        os.makedirs(checkpoint_path, exist_ok=True)
         model_checkpoint_path = join(checkpoint_path, f"{name}_x{upscale_factor}_checkpoint.pth")
         checkpoint = None
         if exists(model_checkpoint_path):
