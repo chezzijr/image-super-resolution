@@ -28,4 +28,3 @@ plt.title("PSNR")
 plt.xlabel("Epoch")
 plt.ylabel("PSNR")
 plt.show()
-
