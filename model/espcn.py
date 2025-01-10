@@ -28,7 +28,6 @@ class ESPCN(nn.Module):
         self.eval()
         if x.dim() == 3:
             x = x.unsqueeze(0)
-        x = x.float() / 255.0
         with torch.no_grad():
             x = self(x)
         x = x.squeeze(0)
@@ -136,7 +135,7 @@ def train_model(
             break
     else:
         finished = True
-        print("Training completed.")
+        print("Training completed succesfully.")
 
     # Save model
     return model, checkpoint, finished
