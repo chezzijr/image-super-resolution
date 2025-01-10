@@ -1,9 +1,12 @@
 import torch
 import json
+import os
 from model import espcn, edsr, EarlyStopping
 from os.path import join, exists
 from os import getcwd
 from utils import hr_transform, lr_transform
+import kagglehub
+import shutil
 
 modules = [espcn, edsr]
 upscale_factor = 4
@@ -12,12 +15,43 @@ stats_path = join(getcwd(), "stats")
 device = "cuda" if torch.cuda.is_available() else "cpu"
 checkpoint_path = join(getcwd(), "checkpoint")
 
+def prepare_dataset():
+    # if dataset exists, return
+    # if exists(join(getcwd(), "datasets", "train")) and exists(join(getcwd(), "datasets", "validate")):
+    #     return
+
+    # Download latest version
+    path = kagglehub.dataset_download("sharansmenon/div2k")
+    print("Path to dataset files:", path) 
+
+    os.makedirs(join(getcwd(), "datasets"), exist_ok=True)
+    os.makedirs(join(getcwd(), "datasets", "train"), exist_ok=True)
+    os.makedirs(join(getcwd(), "datasets", "validate"), exist_ok=True)
+    
+    # move all files
+    kaggle_train_files = join(path, "DIV2K_train_HR", "DIV2K_train_HR")
+    kaggle_validate_files = join(path, "DIV2K_valid_HR", "DIV2K_valid_HR")
+    train_dir = join(getcwd(), "datasets", "train")
+    validate_dir = join(getcwd(), "datasets", "validate")
+    train_files = os.listdir(kaggle_train_files)
+    validate_files = os.listdir(kaggle_validate_files)
+    for train_file in train_files:
+        shutil.move(join(kaggle_train_files, train_file), join(getcwd(), train_dir))
+
+    for validate_file in validate_files:
+        shutil.move(join(kaggle_validate_files, validate_file), join(getcwd(), validate_dir))
+
+    # empty cache
+    os.rmdir(path)
+
 def train():
     for module in modules:
         name = module.__name__.split(".")[-1]
         callback = EarlyStopping(patience=5) 
         
         # checkpoint from latest epoch if any
+        # ensure checkpoint path
+        os.makedirs(checkpoint_path, exist_ok=True)
         model_checkpoint_path = join(checkpoint_path, f"{name}_x{upscale_factor}_checkpoint.pth")
         checkpoint = None
         if exists(model_checkpoint_path):
@@ -46,4 +80,5 @@ def train():
             torch.save(checkpoint, model_checkpoint_path)
 
 if __name__ == "__main__":
-    train()
+    # train()
+    prepare_dataset()

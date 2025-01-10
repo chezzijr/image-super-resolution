@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "huggingface-hub==0.25.0",
+    "kagglehub>=0.3.6",
     "matplotlib>=3.10.0",
     "pyqt5>=5.15.11",
     "realesrgan",
