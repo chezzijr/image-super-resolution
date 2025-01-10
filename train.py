@@ -21,6 +21,9 @@ os.makedirs(stats_path, exist_ok=True)
 os.makedirs(checkpoint_path, exist_ok=True)
 
 def prepare_dataset():
+    if exists(join(getcwd(), "datasets", "train")) and exists(join(getcwd(), "datasets", "validate")):
+        return
+
     # Download latest version
     path = kagglehub.dataset_download("sharansmenon/div2k")
     print("Path to dataset files:", path) 
@@ -43,7 +46,7 @@ def prepare_dataset():
         shutil.move(join(kaggle_validate_files, validate_file), join(getcwd(), validate_dir))
 
     # empty cache
-    os.rmdir(path)
+    shutil.rmtree(path)
 
 def train():
     for module in modules:
