@@ -83,5 +83,5 @@ def train():
             torch.save(checkpoint, model_checkpoint_path)
 
 if __name__ == "__main__":
-    # train()
     prepare_dataset()
+    train()
